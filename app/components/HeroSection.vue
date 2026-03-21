@@ -34,20 +34,20 @@
         <a href="#contact" class="border border-white text-white hover:bg-white/10 px-8 py-4 text-sm rounded-full font-semibold transition-all w-full md:w-auto inline-block">Contact Us</a>
       </div>
 
-      <div class="relative w-full md:w-[800px] mt-5 mx-auto">
+      <div class="relative w-[90%] max-w-[800px] mt-5 m x-auto">
         <div class="banner-container">
           <img src="/images/mainbanner.png" alt="Dashboard" class="banner-image" />
         </div>
-        <img src="/images/bannerfloat1.png" alt="" class="hidden md:block absolute w-[110px] rounded-[5px] shadow-[0_10px_20px_rgba(0,0,0,0.1)] -left-[85px] top-[24px]" />
-        <img src="/images/bannerfloat1.png" alt="" class="hidden md:block absolute w-[110px] rounded-[5px] shadow-[0_10px_20px_rgba(0,0,0,0.1)] -right-[85px] top-[50px]" />
+        <img src="/images/bannerfloat1.png" alt="" class="absolute w-[20%] max-w-[110px] md:w-[110px] rounded-[5px] shadow-[0_10px_20px_rgba(0,0,0,0.1)] -left-[20px] md:-left-[85px] top-[45%] md:top-[24px] z-20" />
+        <img src="/images/bannerfloat1.png" alt="" class="absolute w-[20%] max-w-[110px] md:w-[110px] rounded-[5px] shadow-[0_10px_20px_rgba(0,0,0,0.1)] -right-[20px] md:-right-[85px] top-[45%] md:top-[50px] z-20" />
       </div>
+      
     </div>
   </section>
 </template>
 
 
 <style scoped>
-
 .banner-container {
   position: relative;
 }
@@ -57,8 +57,23 @@
   bottom: -406px;
   right: -15px;
   left: 50%;
-  width: 800px;
   transform: translateX(-50%);
   border-radius: 12px;
+}
+
+@media (max-width: 668px) {
+  .banner-container {
+    height: 18vw; /* provide height so image is not cropped by overflow-hidden */
+    margin-top: 30px;
+   position: relative;
+
+  }
+  .banner-image {
+    width: 90vw;
+    bottom: auto;
+    top: 0;
+    right: auto;
+    border-radius: 8px;
+  }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <section class="py-10 md:py-20 bg-white" id="how-to-start">
-    <div class="container mx-auto px-4 md:px-16 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
+    <div class="container mx-auto px-4 md:px-16 grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 items-center">
       <div class="reveal-left">
         <div class="mb-8 md:mb-12 text-center md:text-left">
           <p class="text-[14px] font-semibold tracking-[2.1px] uppercase text-[#0057e2] mb-4">How to Start</p>
@@ -13,7 +13,7 @@
             :key="index" 
             class="cursor-pointer transition-all duration-300"
             :class="{ 'opacity-100': activeStep === index, 'opacity-70 hover:opacity-100': activeStep !== index }"
-            @click="activeStep = index"
+            @click="activeStep = activeStep === index ? -1 : index"
           >
             <div class="flex items-center gap-3 pb-4">
               <div 
@@ -26,29 +26,26 @@
                 {{ step.title }}
               </h3>
               <div class="text-sm text-[#8f9291]">
-                <span v-if="activeStep === index" class="rotate-180 inline-block transition-transform duration-300">▼</span>
-                <span v-else class="inline-block transition-transform duration-300">▼</span>
+                <span :class="{ 'rotate-180': activeStep === index }" class="inline-block transition-transform duration-300 text-xs">▼</span>
               </div>
             </div>
             
-            <Transition
-              enter-active-class="transition duration-300 ease-out"
-              enter-from-class="transform -translate-y-2 opacity-0"
-              enter-to-class="transform translate-y-0 opacity-100"
-              leave-active-class="transition duration-200 ease-in"
-              leave-from-class="transform translate-y-0 opacity-100"
-              leave-to-class="transform -translate-y-2 opacity-0"
+            <div 
+              class="grid transition-all duration-300 ease-in-out overflow-hidden" 
+              :class="activeStep === index ? 'grid-rows-[1fr] opacity-100 pointer-events-auto' : 'grid-rows-[0fr] opacity-0 pointer-events-none'"
             >
-              <div v-if="activeStep === index" class="pl-0 md:pl-11 pb-6 text-sm md:text-base text-[#5c615e] leading-relaxed">
-                <p>{{ step.description }}</p>
+              <div class="min-h-0">
+                <div class="pl-0 md:pl-11 pb-6 text-sm md:text-base text-[#5c615e] leading-relaxed">
+                  <p>{{ step.description }}</p>
+                </div>
               </div>
-            </Transition>
+            </div>
             <div class="h-px bg-[#0c12131a] w-full"></div>
           </div>
         </div>
       </div>
 
-      <div class="order-first md:order-last reveal-right h-[300px] md:h-[700px] relative">
+      <div class="order-first lg:order-last reveal-right h-[300px] md:h-[700px] relative">
         <Transition
           mode="out-in"
           enter-active-class="transition-all duration-500 ease-out"

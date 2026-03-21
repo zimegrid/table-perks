@@ -15,7 +15,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 600;
   line-height: 1.2;
 }
@@ -27,7 +32,7 @@ p {
 .container {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0 var(--space-64);
+  /* padding: 0 var(--space-64); */
 }
 
 a {
@@ -136,14 +141,24 @@ button {
 
 /* Marquee Animation */
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(calc(-50% - 20px)); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(calc(-50% - 20px));
+  }
 }
 
 @media (min-width: 768px) {
   @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(calc(-50% - 40px)); }
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(calc(-50% - 40px));
+    }
   }
 }
 
