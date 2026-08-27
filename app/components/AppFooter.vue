@@ -20,6 +20,7 @@
           </div>
           <div class="flex flex-col min-w-[120px]">
             <h4 class="text-base font-semibold text-[#0c130f] mb-3">Help</h4>
+            <NuxtLink to="/help" class="text-[#5c615e] text-base mb-3 hover:text-[#0057e2] transition-colors">Merchant Setup Guide</NuxtLink>
             <NuxtLink to="/#resources" class="text-[#5c615e] text-base mb-3 hover:text-[#0057e2] transition-colors">FAQs</NuxtLink>
             <a href="#" class="text-[#5c615e] text-base mb-3 hover:text-[#0057e2] transition-colors" @click.prevent="openOnboarding">Get Started</a>
             <a href="#" class="text-[#5c615e] text-base mb-3 hover:text-[#0057e2] transition-colors" @click.prevent="openContact">Contact us</a>
