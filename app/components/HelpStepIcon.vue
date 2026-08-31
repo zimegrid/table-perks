@@ -65,11 +65,33 @@
     </template>
 
     <!-- Scan QR -->
-    <template v-else-if="slug === 'scanqr'">
+    <template v-else-if="slug === 'scanqr' || slug === 'scan-qr'">
       <rect x="3" y="3" width="7" height="7" rx="1" />
       <rect x="14" y="3" width="7" height="7" rx="1" />
       <rect x="3" y="14" width="7" height="7" rx="1" />
       <path d="M14 14h3v3h-3zM19 14h2M14 19h2M19 19h2" />
+    </template>
+
+    <!-- Points Configuration: sliders -->
+    <template v-else-if="slug === 'config'">
+      <line x1="4" y1="6" x2="20" y2="6" />
+      <circle cx="14" cy="6" r="2" fill="currentColor" stroke="none" />
+      <line x1="4" y1="12" x2="20" y2="12" />
+      <circle cx="8" cy="12" r="2" fill="currentColor" stroke="none" />
+      <line x1="4" y1="18" x2="20" y2="18" />
+      <circle cx="16" cy="18" r="2" fill="currentColor" stroke="none" />
+    </template>
+
+    <!-- Points Rewards: gift -->
+    <template v-else-if="slug === 'rewards'">
+      <rect x="4" y="8" width="16" height="12" rx="1" />
+      <path d="M4 12h16M12 8v12" />
+      <path d="M12 8c-1.2-2.7-5-2.7-5 0 0 1.4 1.8 1.4 5 0zM12 8c1.2-2.7 5-2.7 5 0 0 1.4-1.8 1.4-5 0z" />
+    </template>
+
+    <!-- Membership Tiers: crown -->
+    <template v-else-if="slug === 'tiers'">
+      <path d="M4 18h16l-1.2-8-4 3-2.8-6-2.8 6-4-3L4 18z" />
     </template>
   </svg>
 </template>

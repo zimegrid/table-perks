@@ -1,15 +1,34 @@
 <template>
   <main class="py-20 md:py-40">
     <div class="container mx-auto px-4 md:px-16 max-w-5xl ">
+      <div class="flex justify-center mb-10">
+        <div class="inline-flex p-1 rounded-full border border-black/10 bg-white gap-1">
+          <button
+            type="button"
+            class="px-4 py-2 rounded-full text-sm font-semibold transition-colors"
+            :class="activeSystem === 'stamp' ? 'bg-primary text-white' : 'text-neutral-300 hover:text-primary'"
+            @click="activeSystem = 'stamp'"
+          >
+            Stamp System Guide
+          </button>
+          <button
+            type="button"
+            class="px-4 py-2 rounded-full text-sm font-semibold transition-colors"
+            :class="activeSystem === 'points' ? 'bg-primary text-white' : 'text-neutral-300 hover:text-primary'"
+            @click="activeSystem = 'points'"
+          >
+            Point System Guide
+          </button>
+        </div>
+      </div>
+
       <div class="text-center max-w-3xl mx-auto mb-16">
         <p class="text-primary font-semibold uppercase tracking-wider text-sm mb-3">Merchant Onboarding</p>
         <h1 class="text-4xl md:text-5xl font-bold text-neutral-500 mb-4">
-          Set up your Stamp Loyalty System
+          {{ hero.title }}
         </h1>
         <p class="text-neutral-300 text-lg leading-relaxed">
-          This guide is written for merchants only. It starts after your account is already activated by Table Perks.
-          Follow the exact setup order below to configure your Stamp Loyalty System before enrolling customers and
-          issuing stamps.
+          {{ hero.description }}
         </p>
       </div>
 
@@ -31,13 +50,15 @@
 
       <div v-if="pending" class="text-neutral-300">Loading guide…</div>
       <div v-else class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <NuxtLink v-for="step in steps" :key="step.path" :to="step.path"
+        <NuxtLink v-for="step in orderedSteps" :key="step.path" :to="`${step.path}?system=${activeSystem}`"
           class="group p-5 rounded-2xl border border-black/10 bg-white hover:border-primary/40 hover:shadow-md transition-all duration-300">
           <div
             class="w-10 h-10 rounded-full bg-primary-50 text-primary flex items-center justify-center mb-3 group-hover:bg-primary group-hover:text-white transition-colors">
             <HelpStepIcon :slug="step.path.split('/').pop()!" />
           </div>
-          <p class="text-xs font-semibold text-neutral-200 uppercase tracking-wider mb-1">Step {{ step.stepNumber }}</p>
+          <p class="text-xs font-semibold text-neutral-200 uppercase tracking-wider mb-1">
+            Step {{ activeSystem === 'stamp' ? step.stampOrder : step.pointsOrder }}
+          </p>
           <p class="font-semibold text-neutral-500 mb-1 group-hover:text-primary transition-colors">{{ step.title }}</p>
           <p class="text-neutral-300 text-sm">{{ step.description }}</p>
         </NuxtLink>
@@ -47,30 +68,80 @@
 </template>
 
 <script setup lang="ts">
+const route = useRoute()
+
+const activeSystem = ref<'stamp' | 'points'>(route.query.system === 'points' ? 'points' : 'stamp')
+
 useHead({
   title: 'Merchant Setup Guide - Table Perks',
 })
 
-const { data: steps, pending } = await useAsyncData('help-steps', () =>
-  queryCollection('help').order('stepNumber', 'ASC').all()
+const { data: allSteps, pending } = await useAsyncData('help-steps', () =>
+  queryCollection('help').all()
 )
 
-const checklist = [
-  {
-    title: 'Recommended Setup Order',
-    description: 'Branches → Roles → Staff → Categories → Menu → Stamps → Promotions → Email → Campaigns → Scan QR',
-  },
-  {
-    title: 'Merchant Focused',
-    description: 'No super admin actions included in this guide',
-  },
-  {
-    title: 'Screenshot Ready',
-    description: 'Each step includes screenshots or placeholders for what to capture',
-  },
-  {
-    title: 'Step by Step',
-    description: 'Follow each step in order for a smooth loyalty program launch',
-  },
-]
+const orderedSteps = computed(() => {
+  if (!allSteps.value) return []
+  return allSteps.value
+    .filter((step) => step.systems.includes(activeSystem.value))
+    .sort((a, b) => {
+      const orderA = activeSystem.value === 'stamp' ? a.stampOrder! : a.pointsOrder!
+      const orderB = activeSystem.value === 'stamp' ? b.stampOrder! : b.pointsOrder!
+      return orderA - orderB
+    })
+})
+
+const hero = computed(() =>
+  activeSystem.value === 'stamp'
+    ? {
+        title: 'Set up your Stamp Loyalty System',
+        description:
+          'This guide is written for merchants only. It starts after your account is already activated by Table Perks. Follow the exact setup order below to configure your Stamp Loyalty System before enrolling customers and issuing stamps.',
+      }
+    : {
+        title: 'Set up your Points Loyalty System',
+        description:
+          'This guide is written for merchants only. It starts after your account is already activated by Table Perks. Follow the exact setup order below to configure your Points Loyalty System before enrolling customers and issuing points.',
+      }
+)
+
+const checklist = computed(() =>
+  activeSystem.value === 'stamp'
+    ? [
+        {
+          title: 'Recommended Setup Order',
+          description: 'Branches → Roles → Staff → Categories → Menu → Stamps → Promotions → Email → Campaigns → Scan QR',
+        },
+        {
+          title: 'Merchant Focused',
+          description: 'No super admin actions included in this guide',
+        },
+        {
+          title: 'Screenshot Ready',
+          description: 'Each step includes screenshots or placeholders for what to capture',
+        },
+        {
+          title: 'Step by Step',
+          description: 'Follow each step in order for a smooth loyalty program launch',
+        },
+      ]
+    : [
+        {
+          title: 'Recommended Setup Order',
+          description: 'Branches → Roles → Staff → Categories → Menu → Points Config → Rewards → Tiers → Promotions → Email → Campaigns → Scan QR',
+        },
+        {
+          title: 'Merchant Focused',
+          description: 'No super admin actions included in this guide',
+        },
+        {
+          title: 'Screenshot Ready',
+          description: 'Each step includes screenshots or placeholders for what to capture',
+        },
+        {
+          title: 'Step by Step',
+          description: 'Follow each step in order for a smooth loyalty program launch',
+        },
+      ]
+)
 </script>
